@@ -1,19 +1,25 @@
 <script setup>
 import { reactive } from 'vue'
+import axios from 'axios';
 
 //data
-const post = reactive({
+const getInitialFormData = () => ({
           author : "",
           content : "",
           previewText : "",
           thumbnail : "",
-          title : "",
-          updatedDate : ""
+          title : ""
         });
 
+const post = reactive(getInitialFormData());
+
 // methods
-function onSubmit() {
-    console.log({...post, updatedDate: new Date()});
+async function onSubmit() {
+  await axios.post('/posts.json', {...post, updatedDate: new Date()})
+  .then(() => {
+    Object.assign(post, getInitialFormData());
+  })
+  .catch(e => console.warn(e));
 }
 </script>
 
